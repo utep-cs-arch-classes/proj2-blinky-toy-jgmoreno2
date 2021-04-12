@@ -3,7 +3,11 @@
 #include "led.h"
 #include "stateMachines.h"
 
+// variables to denote the status of a switch. ex: switch1_state_down -> switch 1 is pressed | ex: switch1_state_changed -> switch 1 has been triggered
+
 char switch1_state_down, switch1_state_changed, switch2_state_down, switch2_state_changed, switch3_state_down, switch3_state_changed, switch4_state_down, switch4_state_changed; /* effectively boolean */
+
+// the following functions detect a change between pressed and unpressed for each switch
 
 static char 
 switch1_update_interrupt_sense()
@@ -49,12 +53,15 @@ switch_init()			/* setup switch */
   P2IE |= SWITCHES;		/* enable interrupts from switches */
   P2OUT |= SWITCHES;		/* pull-ups for switches */
   P2DIR &= ~SWITCHES;		/* set switches' bits for input */
+  // detect switch presses
   switch1_update_interrupt_sense();
   switch2_update_interrupt_sense();
   switch3_update_interrupt_sense();
   switch4_update_interrupt_sense();
   led_update();
 }
+
+// the following determine the up or down status of each button when their state is changed, select the corresponding machine, and update the leds accordingly
 
 void
 switch1_interrupt_handler()

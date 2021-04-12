@@ -15,8 +15,8 @@ void led_init()
   led_update();
 }
 
-void led_update(){
-   char ledFlags = redVal[red_on] | greenVal[green_on]; /* by default, no LEDs on */
+void led_update(){ //update leds corresponding to how the machines set them externally
+   char ledFlags = redVal[red_on] | greenVal[green_on]; 
 
    P1OUT &= (0xff^LEDS) | ledFlags; // clear bits for off leds
    P1OUT |= ledFlags;

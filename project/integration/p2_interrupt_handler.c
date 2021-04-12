@@ -1,8 +1,11 @@
 #include <msp430.h>
 #include "switches.h"
 
+//handle interrupts only for port vector 2 so only the S1-S4 buttons are used
+
 void
 __interrupt_vec(PORT2_VECTOR) Port_2(){
+  //for each switch, set a flag when it is changed and call interrupt handler
   if (P2IFG & SW1) {
     P2IFG &= ~SW1;
     switch1_interrupt_handler();

@@ -4,12 +4,14 @@
 #include "switches.h"
 #include "buzzer.h"
 
+// all below except lights_on resemble the status of a machine. ex: siren_on = 1 -> siren machine is on
 unsigned char siren_on = 0;
 unsigned char flash_on = 0;
 unsigned char lights_on = 0;
 unsigned char left_signal_on = 0;
 unsigned char right_signal_on = 0;
 
+// uses the most recently pushed button as an indicator for which machine to turn on. All others are turned off
 void select_machine()
 {
   if(switch1_state_down){
@@ -35,12 +37,14 @@ void select_machine()
   }
 }
 
-void turn_red_on()		/* always toggle! */
+//below functions signal for an led to be turned off or on
+
+void turn_red_on() 
 {
-  red_on = 1;			/* always changes an led */
+  red_on = 1;			
 }
 
-void turn_green_on()	/* only toggle green if red is on!  */
+void turn_green_on()	
 {
   green_on = 1;
 }
@@ -55,7 +59,9 @@ void turn_green_off()
   green_on = 0;
 }
 
-void siren_machine()		/* alternate between toggling red & green */
+// the following methods advance the state of their corresponding machine
+
+void siren_machine() // machine that switches between red and green, alternating between high and low tones to mimick a police siren
 {
   static enum {R=0, G=1} color = G;
   switch (color) {
@@ -67,7 +73,7 @@ void siren_machine()		/* alternate between toggling red & green */
   led_update();
 }
 
-void flash_machine()
+void flash_machine() // machine that switches between on and off lights and sound to mimick a car alarm being triggered
 {
   switch(lights_on){
   case 0: turn_red_on(); turn_green_on(); buzzer_set_period(800); lights_on = 1; break;
@@ -78,7 +84,7 @@ void flash_machine()
   led_update();
 }
 
-void left_signal_machine()
+void left_signal_machine() // machine that triggers red, green, then off lights and creates high and low sounds to mimick a turning signal
 {
   static enum {R = 0, not1 = 1, G = 2, not2 = 3} color = not2;
   switch (color) {
@@ -92,7 +98,7 @@ void left_signal_machine()
   led_update();
 }
 
-void right_signal_machine()
+void right_signal_machine() // machine that does the same as the one above, with the exception that the lights move toward the right
 {
   static enum {R = 0, not1 = 1, G = 2, not2 = 3} color = not2;
   switch (color) {

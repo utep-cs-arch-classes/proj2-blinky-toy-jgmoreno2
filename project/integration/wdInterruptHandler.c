@@ -5,7 +5,10 @@
 void
 __interrupt_vec(WDT_VECTOR) WDT(){
   static char blink_count = 0;
-  if(++blink_count == 125){
+  if(++blink_count == 125){ // primary interval at which machines are advanced
+    
+    // if a machine is on, advance its state and reset the clock
+    
     if(siren_on){
       siren_machine();
     }
@@ -19,7 +22,10 @@ __interrupt_vec(WDT_VECTOR) WDT(){
       left_signal_machine();
     }
     blink_count = 0;
-  } else if(blink_count == 63){
+  } else if(blink_count == 63){ // half-time interval for machines that require double the states
+
+    // if machine is on, advance its state
+    
     if(left_signal_on){
       left_signal_machine();
     }

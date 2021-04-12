@@ -5,7 +5,7 @@
 #include "buzzer.h"
 
 void main(void) 
-{  
+{  //initialize all necessary hardware
   configureClocks();
   buzzer_init();
   switch_init();
